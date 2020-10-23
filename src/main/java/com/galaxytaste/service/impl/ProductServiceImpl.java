@@ -1,0 +1,54 @@
+package com.galaxytaste.service.impl;
+
+import com.galaxytaste.domain.Product;
+import com.galaxytaste.exception.domain.ProductNotFoundException;
+import com.galaxytaste.repository.ProductRepository;
+import com.galaxytaste.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+public class ProductServiceImpl implements ProductService {
+
+    public static final String PRODUCT_NOT_FOUND = "Product not found!";
+    @Autowired
+    private ProductRepository productRepository;
+
+
+    @Override
+    public Page<Product> findAllProduct(Pageable pageable) {
+        return this.productRepository.findAll(pageable);
+    }
+
+    @Override
+    public Product getProductById(Long id) throws ProductNotFoundException {
+        return this.productRepository.findById(id)
+        .orElseThrow(()-> new ProductNotFoundException(PRODUCT_NOT_FOUND));
+    }
+
+    @Override
+    public Product save(Product product) {
+        return this.productRepository.save(product);
+    }
+
+
+    @Override
+    public ResponseEntity<?> deleteProduct(Long id) throws ProductNotFoundException {
+//        Product deleteProduct=getProductById(id).get();
+//        if(deleteProduct==null){
+//            throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
+//        }
+//
+//        this.productRepository.deleteById(id);
+//        return deleteProduct;
+        return this.productRepository.findById(id).map(product->{
+            this.productRepository.delete(product);
+            return ResponseEntity.ok().build();
+        }).orElseThrow(()-> new ProductNotFoundException(PRODUCT_NOT_FOUND));
+    }
+}

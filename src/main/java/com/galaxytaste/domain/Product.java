@@ -1,34 +1,40 @@
 package com.galaxytaste.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Blob;
 
 @Entity
-@Table(name="product")
+@Table(name = "product")
+@JsonIgnoreProperties
 public class Product implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
     private String productName;
     private double productPrice;
     private String tag;
     private String description;
+    @Column(columnDefinition = "LONGBLOB")
     private String[] productImageUrl;
-    @ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinColumn(name="category_id")
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public Product() {
     }
 
-    public Product(Long id, String productName, double productPrice, String tag, String description, String[] productImageUrl) {
+    public Product(Long id, String productName, double productPrice, String tag, String description, String[] productImageUrl, Category category) {
         this.id = id;
         this.productName = productName;
         this.productPrice = productPrice;
         this.tag = tag;
         this.description = description;
         this.productImageUrl = productImageUrl;
+        this.category = category;
     }
 
     public Long getId() {
@@ -77,5 +83,13 @@ public class Product implements Serializable {
 
     public void setProductImageUrl(String[] productImageUrl) {
         this.productImageUrl = productImageUrl;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

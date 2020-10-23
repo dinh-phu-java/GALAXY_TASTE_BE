@@ -2,10 +2,7 @@ package com.galaxytaste.exception;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.galaxytaste.domain.HttpResponse;
-import com.galaxytaste.exception.domain.EmailExistException;
-import com.galaxytaste.exception.domain.EmailNotFoundException;
-import com.galaxytaste.exception.domain.UserNotFoundException;
-import com.galaxytaste.exception.domain.UsernameExistException;
+import com.galaxytaste.exception.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -119,10 +116,17 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(NOT_FOUND, exception.getMessage());
     }
 
+
     @ExceptionHandler(IOException.class)
     public ResponseEntity<HttpResponse> iOException(IOException exception) {
         LOGGER.error(exception.getMessage());
         return createHttpResponse(INTERNAL_SERVER_ERROR, ERROR_PROCESSING_FILE);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<HttpResponse> productNotFound(ProductNotFoundException exception){
+        LOGGER.error(exception.getMessage());
+        return createHttpResponse(NOT_FOUND,exception.getMessage());
     }
 
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {

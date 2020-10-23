@@ -36,6 +36,19 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository.save(product);
     }
 
+    @Override
+    public Product updateProduct(Long id, Product newProduct) throws ProductNotFoundException {
+        Product currentProduct=getProductById(id);
+        currentProduct.setCategory(newProduct.getCategory());
+        currentProduct.setDescription(newProduct.getDescription());
+        currentProduct.setProductImageUrl(newProduct.getProductImageUrl());
+        currentProduct.setProductName(newProduct.getProductName());
+        currentProduct.setProductPrice(newProduct.getProductPrice());
+        currentProduct.setTag(newProduct.getTag());
+        save(currentProduct);
+        return currentProduct;
+    }
+
 
     @Override
     public ResponseEntity<?> deleteProduct(Long id) throws ProductNotFoundException {

@@ -1,5 +1,7 @@
 package com.galaxytaste.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +16,7 @@ public class CartItem implements Serializable {
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY,cascade={DETACH,MERGE,PERSIST,REFRESH})
     @JoinColumn(name="cart_id")
+    @JsonIgnore
     private Cart cart;
     private Long productId;
     @Column(columnDefinition="LONGTEXT")
@@ -26,6 +29,13 @@ public class CartItem implements Serializable {
 
     public CartItem(Long id, Long productId, String productImage, double price, int amount) {
         this.id = id;
+        this.productId = productId;
+        this.productImage = productImage;
+        this.price = price;
+        this.amount = amount;
+    }
+
+    public CartItem(Long productId, String productImage, double price, int amount) {
         this.productId = productId;
         this.productImage = productImage;
         this.price = price;

@@ -51,20 +51,17 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    @GetMapping("/cart/{username}")
-//    public ResponseEntity<Cart> getCart(@PathVariable("username") String username) {
-//        LOGGER.info("test spring");
-//        User user = this.userService.findUserByUsername(username);
-//        Cart myCart=user.getCart();
-//        CartItem item1=new CartItem(1L,  1L,  "abc.jpg", 12.4d, 4);
-//        CartItem item2=new CartItem(2L,  2L,  "abc1.jpg", 112.4d, 2);
-//        myCart.addToCart(item1);
-//        myCart.addToCart(item2);
-//        int size=myCart.getCartItems().size();
-//
-//        double totalAmount= myCart.getCartItems().stream().map(item->item.getPrice()).reduce(2.0,(accumulator,element2)->accumulator+element2);
-//        return new ResponseEntity<>(myCart, HttpStatus.OK);
-//    }
+    @GetMapping("/cart/{username}")
+    public ResponseEntity<Double> getCart(@PathVariable("username") String username) {
+        LOGGER.info("test spring");
+        User user = this.userService.findUserByUsername(username);
+        Cart myCart=user.getCart();
+
+        int size=myCart.getCartItems().size();
+
+        double totalAmount= myCart.getCartItems().stream().map(item->item.getPrice()).reduce(0.0,(accumulator,element2)->accumulator+element2);
+        return new ResponseEntity<>(totalAmount, HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {

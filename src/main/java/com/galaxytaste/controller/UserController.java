@@ -1,6 +1,8 @@
 package com.galaxytaste.controller;
 
 import com.galaxytaste.constant.SecurityConstant;
+import com.galaxytaste.domain.Cart;
+import com.galaxytaste.domain.CartItem;
 import com.galaxytaste.domain.User;
 import com.galaxytaste.domain.UserPrincipal;
 import com.galaxytaste.exception.domain.EmailExistException;
@@ -8,6 +10,8 @@ import com.galaxytaste.exception.domain.UserNotFoundException;
 import com.galaxytaste.exception.domain.UsernameExistException;
 import com.galaxytaste.service.UserService;
 import com.galaxytaste.utilities.JWTTokenProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,11 +21,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = {"/", "/user"})
 public class UserController {
-
+    private Logger LOGGER= LoggerFactory.getLogger(UserController.class);
     private UserService userService;
     private AuthenticationManager authenticationManager;
     private JWTTokenProvider jwtTokenProvider;
@@ -44,6 +50,21 @@ public class UserController {
         User user = this.userService.findUserByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+//    @GetMapping("/cart/{username}")
+//    public ResponseEntity<Cart> getCart(@PathVariable("username") String username) {
+//        LOGGER.info("test spring");
+//        User user = this.userService.findUserByUsername(username);
+//        Cart myCart=user.getCart();
+//        CartItem item1=new CartItem(1L,  1L,  "abc.jpg", 12.4d, 4);
+//        CartItem item2=new CartItem(2L,  2L,  "abc1.jpg", 112.4d, 2);
+//        myCart.addToCart(item1);
+//        myCart.addToCart(item2);
+//        int size=myCart.getCartItems().size();
+//
+//        double totalAmount= myCart.getCartItems().stream().map(item->item.getPrice()).reduce(2.0,(accumulator,element2)->accumulator+element2);
+//        return new ResponseEntity<>(myCart, HttpStatus.OK);
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {

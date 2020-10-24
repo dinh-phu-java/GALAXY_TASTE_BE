@@ -1,9 +1,12 @@
 package com.galaxytaste.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +20,11 @@ public class User implements Serializable {
     private String profileImageUrl;
     private String role;
     private String[] authorities;
+
+    @OneToOne(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @JoinColumn(name="cart_id")
+    @JsonIgnore
+    private Cart cart;
 
     public User() {
     }
@@ -35,6 +43,14 @@ public class User implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public void setId(Long id) {

@@ -1,5 +1,6 @@
 package com.galaxytaste.service.impl;
 
+import com.galaxytaste.domain.Cart;
 import com.galaxytaste.domain.User;
 import com.galaxytaste.domain.UserPrincipal;
 import com.galaxytaste.enumeration.Role;
@@ -72,6 +73,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public User register(String firstName, String lastName, String username, String email, String password) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
         validateNewUsernameAndEmail(StringUtils.EMPTY, username, email);
         User user = new User();
+        Cart cart=new Cart();
+
         String encodePassword = encodePassword(password);
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -81,6 +84,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setRole(Role.ROLE_USER.name());
         user.setAuthorities(Role.ROLE_USER.getAuthorities());
         user.setProfileImageUrl(getTemporaryProfileUrl());
+        cart.setUser(user);
+        user.setCart(cart);
         this.userRepository.save(user);
         LOGGER.info("New user was created with password: " + password);
         return user;

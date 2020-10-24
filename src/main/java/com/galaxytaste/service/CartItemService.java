@@ -9,4 +9,6 @@ public interface CartItemService {
     CartItem updateAmountCartItem(String username, int cartItemIndex, int amount) throws UserNotFoundException;
 
     CartItem deleteCartItem(String username, int cartItemIndex) throws UserNotFoundException;
+
+    void deleteAllCartItemByUsername(String username) throws UserNotFoundException;
 }

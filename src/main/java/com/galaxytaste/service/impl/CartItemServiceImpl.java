@@ -26,7 +26,7 @@ public class CartItemServiceImpl implements CartItemService {
     private UserRepository userRepository;
 
     @Override
-    public CartItem createCartItem(String username, Long productId, String productImage, double price, int amount,String productName) throws UserNotFoundException {
+    public CartItem createCartItem(String username, Long productId, String productImage, double price, int amount, String productName) throws UserNotFoundException {
         User user = this.userRepository.findUserByUsername(username);
         if (user == null) {
             throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME);
@@ -34,7 +34,7 @@ public class CartItemServiceImpl implements CartItemService {
         Cart cart = user.getCart();
         CartItem item = new CartItem();
         item.setAmount(amount);
-        item.setPrice(price);
+        item.setPrice(price * amount);
         item.setProductImage(productImage);
         item.setProductId(productId);
         item.setProductName(productName);
@@ -54,6 +54,7 @@ public class CartItemServiceImpl implements CartItemService {
         Cart cart = user.getCart();
         List<CartItem> listCartItem = cart.getCartItems();
         CartItem currentCartItem = listCartItem.get(cartItemIndex);
+        currentCartItem.setPrice(currentCartItem.getPrice()*amount);
         currentCartItem.setAmount(amount);
         cart.getCartItems().set(cartItemIndex, currentCartItem);
         this.userRepository.save(user);
@@ -68,9 +69,23 @@ public class CartItemServiceImpl implements CartItemService {
             throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME);
         }
         Cart cart = user.getCart();
-        CartItem deleteCartItem=cart.getCartItems().remove(cartItemIndex);
+        CartItem deleteCartItem = cart.getCartItems().remove(cartItemIndex);
         this.cartItemRepository.delete(deleteCartItem);
         this.userRepository.save(user);
         return deleteCartItem;
     }
+
+    @Override
+    public void deleteAllCartItemByUsername(String username) throws UserNotFoundException {
+        User user = this.userRepository.findUserByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME);
+        }
+        Cart cart =user.getCart();
+        cart.setCartItems(null);
+        this.cartItemRepository.deleteAllByCart(cart);
+        this.userRepository.save(user);
+    }
+
+
 }

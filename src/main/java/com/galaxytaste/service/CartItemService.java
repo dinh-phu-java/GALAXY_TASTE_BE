@@ -6,6 +6,6 @@ import com.galaxytaste.exception.domain.UserNotFoundException;
 
 public interface CartItemService {
     CartItem createCartItem(String username, Long productId, String productImage, double price, int amount) throws UserNotFoundException;
-    CartItem updateAmountCartItem(int amount);
+    CartItem updateAmountCartItem(String username,int cartItemIndex,int amount) throws UserNotFoundException;
     CartItem deleteCartItem(Long id,String username);
 }

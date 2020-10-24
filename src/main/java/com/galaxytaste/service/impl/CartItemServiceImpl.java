@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.galaxytaste.constant.UserImplConstant.NO_USER_FOUND_BY_USERNAME;
 
 @Service
@@ -44,8 +46,18 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItem updateAmountCartItem(int amount) {
-        return null;
+    public CartItem updateAmountCartItem(String username,int cartItemIndex,int amount) throws UserNotFoundException {
+        User user= this.userRepository.findUserByUsername(username);
+        if(user==null){
+            throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME);
+        }
+        Cart cart=user.getCart();
+        List<CartItem> listCartItem= cart.getCartItems();
+        CartItem currentCartItem=listCartItem.get(cartItemIndex);
+        currentCartItem.setAmount(amount);
+        cart.getCartItems().set(cartItemIndex,currentCartItem);
+        this.userRepository.save(user);
+        return currentCartItem;
     }
 
     @Override

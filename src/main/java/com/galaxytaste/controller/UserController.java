@@ -8,6 +8,7 @@ import com.galaxytaste.domain.UserPrincipal;
 import com.galaxytaste.exception.domain.EmailExistException;
 import com.galaxytaste.exception.domain.UserNotFoundException;
 import com.galaxytaste.exception.domain.UsernameExistException;
+import com.galaxytaste.repository.UserRepository;
 import com.galaxytaste.service.UserService;
 import com.galaxytaste.utilities.JWTTokenProvider;
 import org.slf4j.Logger;
@@ -33,6 +34,9 @@ public class UserController {
     private JWTTokenProvider jwtTokenProvider;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     public UserController(UserService userService, AuthenticationManager authenticationManager, JWTTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -56,7 +60,7 @@ public class UserController {
         LOGGER.info("test spring");
         User user = this.userService.findUserByUsername(username);
         Cart myCart=user.getCart();
-
+//        myCart.getCartItems().remove(0);
         int size=myCart.getCartItems().size();
 
         double totalAmount= myCart.getCartItems().stream().map(item->item.getPrice()).reduce(0.0,(accumulator,element2)->accumulator+element2);

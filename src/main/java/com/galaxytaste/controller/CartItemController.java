@@ -6,10 +6,7 @@ import com.galaxytaste.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CartItemController {
@@ -27,4 +24,14 @@ public class CartItemController {
        CartItem item= this.cartItemService.updateAmountCartItem(username,cartItemIndex,amount);
         return new ResponseEntity<>(item,HttpStatus.OK);
     }
+
+    // need to user token
+    @DeleteMapping("/cart-item")
+    public ResponseEntity<CartItem> deleteCartItem(@RequestParam String username,@RequestParam int cartItemIndex) throws UserNotFoundException {
+       CartItem deleteItem= this.cartItemService.deleteCartItem(username,cartItemIndex);
+       return new ResponseEntity<>(deleteItem,HttpStatus.OK);
+    }
+
+//    @GetMapping("/cart-item")
+    
 }

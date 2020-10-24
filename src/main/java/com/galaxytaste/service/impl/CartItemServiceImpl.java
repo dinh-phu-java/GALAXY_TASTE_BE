@@ -26,7 +26,7 @@ public class CartItemServiceImpl implements CartItemService {
     private UserRepository userRepository;
 
     @Override
-    public CartItem createCartItem(String username, Long productId, String productImage, double price, int amount) throws UserNotFoundException {
+    public CartItem createCartItem(String username, Long productId, String productImage, double price, int amount,String productName) throws UserNotFoundException {
         User user = this.userRepository.findUserByUsername(username);
         if (user == null) {
             throw new UserNotFoundException(NO_USER_FOUND_BY_USERNAME);
@@ -37,6 +37,7 @@ public class CartItemServiceImpl implements CartItemService {
         item.setPrice(price);
         item.setProductImage(productImage);
         item.setProductId(productId);
+        item.setProductName(productName);
         cart.addToCart(item);
         item.setCart(cart);
         this.userRepository.save(user);

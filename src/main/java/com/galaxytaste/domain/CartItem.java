@@ -23,33 +23,49 @@ public class CartItem implements Serializable {
     private String productImage;
     private double price;
     private int amount;
+    private String productName;
 
     public CartItem() {
     }
 
-    public CartItem(Long id, Long productId, String productImage, double price, int amount) {
+
+    public CartItem(Long id, Long productId, String productImage, double price, int amount,String productName) {
         this.id = id;
         this.productId = productId;
         this.productImage = productImage;
         this.price = price;
         this.amount = amount;
+        this.productName=productName;
     }
 
-    public CartItem(Long productId, String productImage, double price, int amount) {
+    public CartItem(Long productId, String productImage, double price, int amount,String productName) {
         this.productId = productId;
         this.productImage = productImage;
         this.price = price;
         this.amount = amount;
+        this.productName=productName;
     }
 
-    public CartItem(Long id, Cart cart, Long productId, String productImage, double price, int amount) {
+
+    public CartItem(Long id, Cart cart, Long productId, String productImage, double price, int amount,String productName) {
         this.id = id;
         this.cart = cart;
         this.productId = productId;
         this.productImage = productImage;
         this.price = price;
         this.amount = amount;
+        this.productName=productName;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+
 
     public String getProductImage() {
         return productImage;

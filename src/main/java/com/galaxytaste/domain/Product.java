@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Blob;
+import java.util.UUID;
 
 @Entity
 @Table(name = "product")
@@ -14,6 +15,7 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
+    private String productCode;
     private String productName;
     private double productPrice;
     private String tag;
@@ -25,9 +27,11 @@ public class Product implements Serializable {
     private Category category;
 
     public Product() {
+        this.productCode= UUID.randomUUID().toString();
     }
 
     public Product(Long id, String productName, double productPrice, String tag, String description, String[] productImageUrl, Category category) {
+        this.productCode= UUID.randomUUID().toString();
         this.id = id;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -35,6 +39,14 @@ public class Product implements Serializable {
         this.description = description;
         this.productImageUrl = productImageUrl;
         this.category = category;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public Long getId() {

@@ -1,8 +1,12 @@
 package com.galaxytaste.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.validation.constraints.NotNull;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class ProductRequestModel {
+
     @NotNull(message="Product Name must not be null")
     private String productName;
     @NotNull(message="Product Price must not be null")
@@ -17,9 +21,11 @@ public class ProductRequestModel {
     private Long categoryId;
 
     public ProductRequestModel() {
+
     }
 
     public ProductRequestModel(@NotNull String productName, @NotNull double productPrice, @NotNull String tag, @NotNull String description, @NotNull String[] productImageUrl, @NotNull Long categoryId) {
+
         this.productName = productName;
         this.productPrice = productPrice;
         this.tag = tag;
@@ -27,6 +33,7 @@ public class ProductRequestModel {
         this.productImageUrl = productImageUrl;
         this.categoryId = categoryId;
     }
+
 
     public String getProductName() {
         return productName;

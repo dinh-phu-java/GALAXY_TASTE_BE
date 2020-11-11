@@ -9,7 +9,7 @@ import com.galaxytaste.exception.domain.EmailNotFoundException;
 import com.galaxytaste.exception.domain.UserNotFoundException;
 import com.galaxytaste.exception.domain.UsernameExistException;
 import com.galaxytaste.repository.UserRepository;
-import com.galaxytaste.service.EmailService;
+
 import com.galaxytaste.service.LoginAttemptService;
 import com.galaxytaste.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -49,15 +49,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private LoginAttemptService loginAttemptService;
-    @Autowired
-    private EmailService emailService;
+
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.findUserByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = this.userRepository.findUserByEmail(email);
         if (user == null) {
-            LOGGER.error(NO_USER_FOUND_BY_USERNAME + username);
-            throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME + username);
+            LOGGER.error(NO_USER_FOUND_BY_EMAIL + email);
+            throw new UsernameNotFoundException(NO_USER_FOUND_BY_EMAIL + email);
         } else {
             validateLoginAttempt(user);
             UserPrincipal userPrincipal = new UserPrincipal(user);

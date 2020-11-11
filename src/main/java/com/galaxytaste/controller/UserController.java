@@ -69,8 +69,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
-        authenticate(user.getUsername(), user.getPassword());
-        User loginUser = this.userService.findUserByUsername(user.getUsername());
+        authenticate(user.getEmail(), user.getPassword());
+        User loginUser = this.userService.findUserByEmail(user.getEmail());
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
         return new ResponseEntity<>(loginUser, jwtHeader, HttpStatus.OK);
@@ -82,7 +82,7 @@ public class UserController {
         return headers;
     }
 
-    private void authenticate(String username, String password) {
-        this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+    private void authenticate(String email, String password) {
+        this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
     }
 }

@@ -1,7 +1,6 @@
 package com.galaxytaste.service;
 
-import org.springframework.stereotype.Service;
 
-@Service
-public class EmailService {
+public interface EmailService {
+  void sendSimpleMessage(String to, String subject, String text);
 }

@@ -129,6 +129,12 @@ public class ExceptionHandling implements ErrorController {
         return createHttpResponse(NOT_FOUND,exception.getMessage());
     }
 
+    @ExceptionHandler(ProductBadRequest.class)
+    public ResponseEntity<HttpResponse> productBadRequest(ProductBadRequest exception){
+        LOGGER.error(exception.getMessage());
+        return createHttpResponse(BAD_REQUEST,exception.getMessage());
+    }
+
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message) {
         return new ResponseEntity<>(new HttpResponse(httpStatus.value(), httpStatus,
                 httpStatus.getReasonPhrase().toUpperCase(), message), httpStatus);

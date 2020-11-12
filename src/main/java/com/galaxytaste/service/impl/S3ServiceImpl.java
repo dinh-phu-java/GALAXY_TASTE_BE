@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.galaxytaste.service.S3Services;
+import com.galaxytaste.utilities.HashUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,14 +70,14 @@ public class S3ServiceImpl implements S3Services {
 
     @Override
     public String uploadService(MultipartFile fileUpload) throws IOException {
-        String fileName=fileUpload.getOriginalFilename();
+        String fileName= HashUtils.hashFileName(fileUpload.getOriginalFilename());
         InputStream inputStream =fileUpload.getInputStream();
         Path uploadLocalPath= Paths.get(this.uploadPath);
         Path filePath= uploadLocalPath.resolve(fileName);
         Files.copy(inputStream,filePath, StandardCopyOption.REPLACE_EXISTING);
         this.uploadFile(fileName,filePath.toString());
         Files.delete(filePath);
-        return s3BucketUrl+fileName;
+        return s3BucketUrl+"products/"+fileName;
     }
 
 

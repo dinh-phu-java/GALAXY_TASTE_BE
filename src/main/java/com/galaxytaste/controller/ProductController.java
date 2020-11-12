@@ -9,6 +9,7 @@ import com.galaxytaste.model.ProductRequestModel;
 import com.galaxytaste.repository.CategoryRepository;
 import com.galaxytaste.service.ProductService;
 import com.galaxytaste.service.S3Services;
+import com.galaxytaste.utilities.HashUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.slf4j.Logger;
@@ -50,7 +51,6 @@ public class ProductController {
                                                  @RequestParam String productPrice,
                                                  @RequestParam String tag,
                                                  @RequestParam String description,
-
                                                  @RequestParam String[] productImageUrl,
                                                  @RequestParam String categoryId,
                                                  @RequestParam MultipartFile[] imageFiles

@@ -28,7 +28,7 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '28.1-jre'
     compile group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.6.Final'
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
-
+    compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.834'
 //    compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
 }
 

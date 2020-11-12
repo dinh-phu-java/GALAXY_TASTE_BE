@@ -30,9 +30,8 @@ public class Product implements Serializable {
         this.productCode= UUID.randomUUID().toString();
     }
 
-    public Product(Long id, String productName, double productPrice, String tag, String description, String[] productImageUrl, Category category) {
+    public Product( String productName, double productPrice, String tag, String description, String[] productImageUrl, Category category) {
         this.productCode= UUID.randomUUID().toString();
-        this.id = id;
         this.productName = productName;
         this.productPrice = productPrice;
         this.tag = tag;

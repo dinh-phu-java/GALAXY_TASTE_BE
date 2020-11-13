@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
@@ -21,8 +23,8 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Page<Product> findAllProduct(Pageable pageable) {
-        return this.productRepository.findAll(pageable);
+    public List<Product> findAllProduct() {
+        return this.productRepository.findAll();
     }
 
     @Override

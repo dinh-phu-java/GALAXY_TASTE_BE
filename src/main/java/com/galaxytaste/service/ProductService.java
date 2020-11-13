@@ -6,8 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface ProductService {
-    Page<Product> findAllProduct(Pageable pageable);
+    List<Product> findAllProduct();
     Product getProductById(Long id) throws ProductNotFoundException;
     Product save(Product product);
     Product updateProduct(Long id,Product newProduct) throws ProductNotFoundException;

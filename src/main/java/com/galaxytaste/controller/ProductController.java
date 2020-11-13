@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class ProductController {
@@ -42,8 +43,9 @@ public class ProductController {
     private Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/product/list")
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return this.productService.findAllProduct(pageable);
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> list = this.productService.findAllProduct();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping("/product")
@@ -68,7 +70,7 @@ public class ProductController {
             databaseImageUrl[j] = cloudImageUrl.get(j);
         }
 
-        Category category = this.categoryRepository.findById(Long.parseLong(categoryId) ).get();
+        Category category = this.categoryRepository.findById(Long.parseLong(categoryId)).get();
         Product productDto = new Product(productName, Double.parseDouble(productPrice), tag, description, databaseImageUrl, category);
         productDto.setCategory(category);
         Product newProduct = this.productService.save(productDto);

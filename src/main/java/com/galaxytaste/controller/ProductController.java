@@ -152,4 +152,16 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+    @DeleteMapping("/product/{productCode}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable String productCode) throws ProductNotFoundException {
+        Product product = this.productService.getProductByProductCode(productCode);
+        for(String awsUrl : product.getProductImageUrl()){
+            String deleteImgName= awsUrl.substring(awsUrl.lastIndexOf('/')+1);
+            this.s3Services.deleteFile(deleteImgName);
+        }
+        Product returnValue=this.productService.deleteProduct(product.getId());
+        return new ResponseEntity<>(returnValue,HttpStatus.OK);
+    }
+
+
 }

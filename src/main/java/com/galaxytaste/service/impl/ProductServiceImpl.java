@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ResponseEntity<?> deleteProduct(Long id) throws ProductNotFoundException {
+    public Product deleteProduct(Long id) throws ProductNotFoundException {
 //        Product deleteProduct=getProductById(id).get();
 //        if(deleteProduct==null){
 //            throw new ProductNotFoundException(PRODUCT_NOT_FOUND);
@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
 //        return deleteProduct;
         return this.productRepository.findById(id).map(product->{
             this.productRepository.delete(product);
-            return ResponseEntity.ok().build();
+            return product;
         }).orElseThrow(()-> new ProductNotFoundException(PRODUCT_NOT_FOUND));
     }
 }

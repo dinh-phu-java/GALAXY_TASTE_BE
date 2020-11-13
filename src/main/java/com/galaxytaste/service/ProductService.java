@@ -14,5 +14,5 @@ public interface ProductService {
     Product getProductById(Long id) throws ProductNotFoundException;
     Product save(Product product);
     Product updateProduct(Long id,Product newProduct) throws ProductNotFoundException;
-    ResponseEntity<?> deleteProduct(Long id) throws ProductNotFoundException;
+    Product deleteProduct(Long id) throws ProductNotFoundException;
 }

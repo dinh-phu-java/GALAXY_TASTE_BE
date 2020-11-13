@@ -99,9 +99,9 @@ public class ProductController {
 //        return new ResponseEntity<>(newProduct, HttpStatus.OK);
 //    }
 
-    @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Long id) throws ProductNotFoundException {
-        Product product = this.productService.getProductById(id);
+    @GetMapping("/product/{productCode}")
+    public ResponseEntity<Product> getProduct(@PathVariable String productCode) throws ProductNotFoundException {
+        Product product = this.productService.getProductByProductCode(productCode);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 

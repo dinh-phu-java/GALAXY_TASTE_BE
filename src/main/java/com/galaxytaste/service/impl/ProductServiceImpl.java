@@ -28,6 +28,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product getProductByProductCode(String productCode) {
+        return this.productRepository.findProductByProductCode(productCode);
+    }
+
+    @Override
     public Product getProductById(Long id) throws ProductNotFoundException {
         return this.productRepository.findById(id)
         .orElseThrow(()-> new ProductNotFoundException(PRODUCT_NOT_FOUND));

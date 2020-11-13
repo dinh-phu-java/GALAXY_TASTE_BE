@@ -77,6 +77,53 @@ public class ProductController {
         return new ResponseEntity<>(newProduct, HttpStatus.OK);
     }
 
+    @PutMapping("/product/{productCode}")
+    public ResponseEntity<Product> updateProduct(@RequestParam String productName,
+                                                 @RequestParam String productPrice,
+                                                 @RequestParam String tag,
+                                                 @RequestParam String description,
+                                                 @RequestParam String[] productImageUrl,
+                                                 @RequestParam String categoryId,
+                                                 @RequestParam MultipartFile[] imageFiles,
+                                                 @PathVariable String productCode
+    ) throws IOException {
+
+        Product currentProduct = this.productService.getProductByProductCode(productCode);
+
+        if (productImageUrl.length != 0 && imageFiles.length != 0) {
+            //delete image in aws s3
+            for(String awsUrl : currentProduct.getProductImageUrl()){
+                String deleteImgName= awsUrl.substring(awsUrl.lastIndexOf('/')+1);
+                this.s3Services.deleteFile(deleteImgName);
+            }
+//            upload image to aws s3
+            ArrayList<String> cloudImageUrl = new ArrayList<>();
+            MultipartFile[] files = imageFiles;
+            for (int i = 0; i < files.length; i++) {
+                String hashImageName=this.s3Services.uploadService(files[i]);
+                cloudImageUrl.add(hashImageName);
+            }
+
+            String databaseImageUrl[] = new String[cloudImageUrl.size()];
+
+            for (int j = 0; j < cloudImageUrl.size(); j++) {
+                databaseImageUrl[j] = cloudImageUrl.get(j);
+            }
+            currentProduct.setProductImageUrl(databaseImageUrl);
+
+
+        }
+        Category category = this.categoryRepository.findById(Long.parseLong(categoryId)).get();
+        currentProduct.setCategory(category);
+        currentProduct.setProductName(productName);
+        currentProduct.setProductPrice(Long.parseLong(productPrice));
+        currentProduct.setTag(tag);
+        currentProduct.setDescription(description);
+        Product returnValue= this.productService.save(currentProduct);
+
+        return new ResponseEntity<>(returnValue, HttpStatus.OK);
+    }
+
 //    @PostMapping("/product")
 //    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductRequestModel product, BindingResult theBinding) throws ProductBadRequest, IOException {
 //        if(theBinding.hasErrors()){
@@ -105,9 +152,4 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PutMapping("/product/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product updateProduct) throws ProductNotFoundException {
-        Product newProduct = this.productService.updateProduct(id, updateProduct);
-        return new ResponseEntity<>(newProduct, HttpStatus.OK);
-    }
 }

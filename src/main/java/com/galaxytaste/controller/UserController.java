@@ -8,6 +8,7 @@ import com.galaxytaste.domain.UserPrincipal;
 import com.galaxytaste.exception.domain.EmailExistException;
 import com.galaxytaste.exception.domain.UserNotFoundException;
 import com.galaxytaste.exception.domain.UsernameExistException;
+import com.galaxytaste.model.UserRegisterModel;
 import com.galaxytaste.repository.UserRepository;
 import com.galaxytaste.service.UserService;
 import com.galaxytaste.utilities.JWTTokenProvider;
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
+    public ResponseEntity<UserRegisterModel> register(@RequestBody UserRegisterModel user) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
         this.userService.register(user.getFirstName(), user.getLastName(), user.getUsername(), user.getEmail(), user.getPassword());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

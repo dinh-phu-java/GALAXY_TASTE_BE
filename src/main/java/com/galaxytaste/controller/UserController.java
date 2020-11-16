@@ -9,6 +9,7 @@ import com.galaxytaste.exception.domain.EmailExistException;
 import com.galaxytaste.exception.domain.UserNotFoundException;
 import com.galaxytaste.exception.domain.UsernameExistException;
 import com.galaxytaste.model.UserRegisterModel;
+import com.galaxytaste.model.UserSocialLogin;
 import com.galaxytaste.repository.UserRepository;
 import com.galaxytaste.service.UserService;
 import com.galaxytaste.utilities.JWTTokenProvider;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -75,6 +77,24 @@ public class UserController {
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
         return new ResponseEntity<>(loginUser, jwtHeader, HttpStatus.OK);
+    }
+
+    @PostMapping("/check-social-email")
+    public ResponseEntity<User> checkSocialEmail(@RequestBody UserSocialLogin socialUser) throws UserNotFoundException, UsernameExistException, EmailExistException, MessagingException {
+        User findUser= this.userService.findUserByEmail(socialUser.getEmail());
+        User returnValue=null;
+        if(findUser!=null){
+            returnValue=findUser;
+        }else{
+            String randomPassword= UUID.randomUUID().toString();
+            returnValue=this.userService.register(socialUser.getFirstName(), socialUser.getName(), socialUser.getEmail(), socialUser.getEmail(), randomPassword);
+            returnValue.setProfileImageUrl(socialUser.getPhotoUrl());
+            this.userService.save(returnValue);
+        }
+
+        UserPrincipal userPrincipal=new UserPrincipal(returnValue);
+        HttpHeaders jwtHeader=getJwtHeader(userPrincipal);
+        return new ResponseEntity<>(returnValue,jwtHeader,HttpStatus.OK);
     }
 
     private HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {

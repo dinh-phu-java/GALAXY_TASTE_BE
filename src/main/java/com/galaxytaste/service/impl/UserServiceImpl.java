@@ -130,6 +130,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
+    @Override
+    public User save(User user) {
+        return this.userRepository.save(user);
+    }
+
     private void saveProfileImage(User user, MultipartFile profileImage) throws IOException {
         if (profileImage != null) {
             Path userFolder = Paths.get(USER_FOLDER + user.getUsername()).toAbsolutePath().normalize();
